@@ -14,8 +14,15 @@ public class headerItems {
     WebElement moreLink;
 
 
+    @FindBy(id = "nav")
+    WebElement nav;
+
     public headerItems(WebDriver driver){
         PageFactory.initElements(driver, this);
+    }
+
+    public WebElement getNav(){
+        return nav;
     }
 
     public WebElement getmoreLink(){

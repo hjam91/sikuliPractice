@@ -4,8 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.sikuli.script.FindFailed;
-import org.sikuli.script.Screen;
+
+import org.sikuli.script.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -40,29 +40,57 @@ public class sikuli {
     }
 
         @Test(dataProvider="getDimension")
-        public void headerTest(int x, int y, String size, String menu ) {
+        public void headerTest(int width, int height, String size, String menu ) throws FindFailed {
 
             driver.manage().window().setPosition(new Point(0,0));
-            driver.manage().window().setSize(new Dimension(x,y));
+            driver.manage().window().setSize(new Dimension(width,height));
             driver.get(prop.getProperty("environment"));
 
-            Screen s = new Screen();
-            try {
+            Screen screen = new Screen();
+            Pattern image = new Pattern(size);
+            screen.wait(image, 10);
+            Match m = screen.find(image);
 
-                Thread.sleep(2000);
-                File dimension = new File(size);
-                s.click(dimension);
-
-            } catch (FindFailed e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (!(m == null)){
+                System.out.println("Images Matched" + m);
             }
+            else
+                System.out.println("Did not match" + m);
+
 
             headerItems headerItems = new headerItems(driver);
-
             Actions builder = new Actions(driver);
-            builder.moveToElement(headerItems.getmoreLink()).perform();
+
+            if (width >= 960) {
+                builder.moveToElement(headerItems.getmoreLink()).perform();
+
+                Screen screenMenu = new Screen();
+                Pattern imageMenu = new Pattern(menu);
+                screenMenu.wait(imageMenu, 10);
+                Match m1 = screen.find(imageMenu);
+
+                if (!(m1 == null)){
+                    System.out.println("Images Menu Matched" + m1);
+                }
+                else
+                    System.out.println(" Menu Did not match" + m1);
+
+            }
+
+            else {
+
+                builder.moveToElement(headerItems.getNav()).click().perform();
+                Screen screenMenu1 = new Screen();
+                Pattern imageMenu1 = new Pattern(menu);
+                screenMenu1.wait(imageMenu1, 10);
+                Match m2 = screen.find(imageMenu1);
+
+                if (!(m2 == null)){
+                    System.out.println("Images Matched" + m2);
+                }
+                else
+                    System.out.println("Did not match" + m2);
+            }
 
             try {
                 Thread.sleep(5000);
@@ -72,6 +100,10 @@ public class sikuli {
 
         }
 
+
+            public void menuTest(){
+
+            }
             public static Properties loadProp() throws IOException {
 
                 File file = new File("/home/fortegs/IdeaProjects/sikuliPractice/src/properties.prop");
