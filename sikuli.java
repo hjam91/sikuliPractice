@@ -1,7 +1,9 @@
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
@@ -36,74 +38,85 @@ public class sikuli {
             driver = new ChromeDriver();
         }
 
+        else if (BROWSER.equals("IE")) {
+            System.setProperty("webdriver.chrome.driver", prop.getProperty("chromeDriverLocation"));
+            driver = new ChromeDriver();
+        }
 
-    }
+        else
+            driver = new FirefoxDriver();
 
-        @Test(dataProvider="getDimension")
-        public void headerTest(int width, int height, String size, String menu ) throws FindFailed {
-
-            driver.manage().window().setPosition(new Point(0,0));
-            driver.manage().window().setSize(new Dimension(width,height));
-            driver.get(prop.getProperty("environment"));
-
-            Screen screen = new Screen();
-            Pattern image = new Pattern(size);
-            screen.wait(image, 10);
-            Match m = screen.find(image);
-
-            if (!(m == null)){
-                System.out.println("Images Matched" + m);
-            }
-            else
-                System.out.println("Did not match" + m);
-
-
-            headerItems headerItems = new headerItems(driver);
-            Actions builder = new Actions(driver);
-
-            if (width >= 960) {
-                builder.moveToElement(headerItems.getmoreLink()).perform();
-
-                Screen screenMenu = new Screen();
-                Pattern imageMenu = new Pattern(menu);
-                screenMenu.wait(imageMenu, 10);
-                Match m1 = screen.find(imageMenu);
-
-                if (!(m1 == null)){
-                    System.out.println("Images Menu Matched" + m1);
-                }
-                else
-                    System.out.println(" Menu Did not match" + m1);
-
-            }
-
-            else {
-
-                builder.moveToElement(headerItems.getNav()).click().perform();
-                Screen screenMenu1 = new Screen();
-                Pattern imageMenu1 = new Pattern(menu);
-                screenMenu1.wait(imageMenu1, 10);
-                Match m2 = screen.find(imageMenu1);
-
-                if (!(m2 == null)){
-                    System.out.println("Images Matched" + m2);
-                }
-                else
-                    System.out.println("Did not match" + m2);
-            }
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    //    Cookie newCookie= new Cookie("geo_cookie", "USA", "cnbc.com");
+    //    driver.manage().addCookie(newCookie);
 
         }
 
 
-            public void menuTest(){
+        @Test(dataProvider="getDimension")
+        public void headerTest(int width, int height, String size, String menu ) throws FindFailed, InterruptedException {
+
+            driver.manage().window().setPosition(new Point(0, 0));
+            driver.manage().window().setSize(new Dimension(width, height));
+            driver.get(prop.getProperty("environment"));
+
+           verifyImage(size);
+
+            /*Screen screen = new Screen();
+            Pattern image = new Pattern(size);
+            screen.find(image);
+            screen.wait(image, 10);
+          //  screen.click();
+            Match m = screen.find(image);*/
+
+           /* if (!(m == null)){
+                System.out.println("Images Matched" + m);
+            }
+            else
+                System.out.println("Did not match" + m);*/
+
+
+
+          /*  if (width > 960) {
+                builder.moveToElement(headerItems.getmoreLink()).perform();
+                Thread.sleep(3000);
+                verifyImage(menu);
+            } else {
+
+               // builder.moveToElement(headerItems.getNav()).click().perform();
+                headerItems.getNav().click();
+                Thread.sleep(3000);
+                verifyImage(menu);
 
             }
+        }
+*/
+        }
+
+
+        @Test(dataProvider = "getDimension")
+        public void menuTest(int width, int height, String baseImage, String baseImageMenu) throws FindFailed, InterruptedException {
+
+            driver.manage().window().setPosition(new Point(0, 0));
+            driver.manage().window().setSize(new Dimension(width, height));
+            driver.get(prop.getProperty("environment"));
+
+            headerItems headerItems = new headerItems(driver);
+            Actions builder = new Actions(driver);
+
+            if (width > 960) {
+                builder.moveToElement(headerItems.getmoreLink()).perform();
+                Thread.sleep(3000);
+                verifyImage(baseImageMenu);
+            } else {
+
+                // builder.moveToElement(headerItems.getNav()).click().perform();
+                headerItems.getNav().click();
+                Thread.sleep(3000);
+                verifyImage(baseImageMenu);
+            }
+        }
+
+
             public static Properties loadProp() throws IOException {
 
                 File file = new File("/home/fortegs/IdeaProjects/sikuliPractice/src/properties.prop");
@@ -122,14 +135,14 @@ public class sikuli {
         Object[][] data = new Object[4][4];
 
         // 1st row
-        data[0][0] = 1200;
+        data[0][0] = 1280;
         data[0][1] =  800;
         data[0][2] = prop.getProperty("image1200");
         data[0][3] = prop.getProperty("image1200menu");
 
         // 2nd row
         data[1][0] = 1024;
-        data[1][1] =  600;
+        data[1][1] =  768;
         data[1][2] = prop.getProperty("image1024");
         data[1][3] = prop.getProperty("image1024menu");
 
@@ -147,6 +160,24 @@ public class sikuli {
         return data;
     }
 
+
+    public void verifyImage(String size) throws FindFailed {
+
+        Screen screen = new Screen();
+        Pattern image = new Pattern(size);
+        screen.find(image);
+      //  screen.wait(image, 10);
+     //   screen.click();
+        Match m = screen.find(image);
+
+        if (!(m == null)){
+            System.out.println("Images Matched" + m);
+        }
+        else
+            System.out.println("Did not match" + m);
+
+
+    }
 
         @AfterClass
         public static void breakDown(){

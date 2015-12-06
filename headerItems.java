@@ -14,7 +14,7 @@ public class headerItems {
     WebElement moreLink;
 
 
-    @FindBy(id = "nav")
+    @FindBy(xpath = ".//*[@id='nav']")
     WebElement nav;
 
     public headerItems(WebDriver driver){
