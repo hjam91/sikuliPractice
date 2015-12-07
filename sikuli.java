@@ -94,8 +94,55 @@ public class sikuli {
                     System.out.println("Image 2 match Success");
                 }
 
+            }
+
+
         }
+
+    @Test(dataProvider="getDimension")
+    public void headerTestXfinity(int width, int height, String baseImage, String baseImageMenu ) throws FindFailed, InterruptedException, IOException {
+
+        String ID;
+        URL = prop.getProperty("URL");
+        driver.manage().window().setPosition(new Point(0, 0));
+        driver.manage().window().setSize(new Dimension(width, height));
+
+        File testDataSrc = new File(prop.getProperty("testDataLocation"));
+        FileInputStream testData = new FileInputStream(testDataSrc);
+        XSSFWorkbook wb = new XSSFWorkbook(testData);
+        XSSFSheet sheet1 = wb.getSheetAt(0);
+        headerItems headerItems1 = new headerItems(driver);
+        driver.get(URL+"/xfinity-money/");
+
+        System.out.println("Physical Number of Rows:" + (sheet1.getPhysicalNumberOfRows()-1));
+        for (int i = 1; i < 3; i++) {
+
+            ID = sheet1.getRow(i).getCell(1).getStringCellValue();
+            driver.get(URL + "/id/" + ID);
+            Thread.sleep(4000);
+            verifyImage(baseImage);
+            System.out.println("Image 1 match Success");
+
+            if (width > 960) {
+
+                Actions builder = new Actions(driver);
+                builder.moveToElement(headerItems1.getmoreLink()).perform();
+                Thread.sleep(4000);
+                verifyImage(baseImageMenu);
+                System.out.println("Image 2 match Success");
+            }
+
+            else {
+                headerItems1.getNav().click();
+                Thread.sleep(3000);
+                verifyImage(baseImageMenu);
+                System.out.println("Image 2 match Success");
+            }
+
         }
+
+
+    }
 
 
             public static Properties loadProp() throws IOException {
@@ -107,6 +154,26 @@ public class sikuli {
                 fileInput.close();
                 return prop;
             }
+
+    public void verifyImage(String size) throws FindFailed {
+
+        Screen screen = new Screen();
+        Pattern image = new Pattern(size);
+        screen.find(image);
+        //  screen.wait(image, 10);
+        //   screen.click();
+        Match m = screen.find(image);
+
+        if (!(m == null)){
+            System.out.println("Images Matched" + m);
+        }
+        else
+            System.out.println("Did not match" + m);
+
+
+    }
+
+
 
     @DataProvider
     public Object[][] getDimension()
@@ -142,23 +209,7 @@ public class sikuli {
     }
 
 
-    public void verifyImage(String size) throws FindFailed {
 
-        Screen screen = new Screen();
-        Pattern image = new Pattern(size);
-        screen.find(image);
-      //  screen.wait(image, 10);
-     //   screen.click();
-        Match m = screen.find(image);
-
-        if (!(m == null)){
-            System.out.println("Images Matched" + m);
-        }
-        else
-            System.out.println("Did not match" + m);
-
-
-    }
 
         @AfterClass
         public static void breakDown(){
