@@ -53,6 +53,9 @@ public class sikuli {
     //    Cookie newCookie= new Cookie("geo_cookie", "USA", "cnbc.com");
     //    driver.manage().addCookie(newCookie);
 
+        URL = prop.getProperty("URL");
+        driver.manage().window().setPosition(new Point(0, 0));
+
         }
 
 
@@ -60,8 +63,6 @@ public class sikuli {
         public void headerTest(int width, int height, String baseImage, String baseImageMenu ) throws FindFailed, InterruptedException, IOException {
 
             String ID;
-            URL = prop.getProperty("URL");
-            driver.manage().window().setPosition(new Point(0, 0));
             driver.manage().window().setSize(new Dimension(width, height));
 
             File testDataSrc = new File(prop.getProperty("testDataLocation"));
@@ -104,6 +105,7 @@ public class sikuli {
 
         String ID;
         URL = prop.getProperty("URL");
+        driver.get(URL+"/xfinity-money/");
         driver.manage().window().setPosition(new Point(0, 0));
         driver.manage().window().setSize(new Dimension(width, height));
 
@@ -112,7 +114,7 @@ public class sikuli {
         XSSFWorkbook wb = new XSSFWorkbook(testData);
         XSSFSheet sheet1 = wb.getSheetAt(0);
         headerItems headerItems1 = new headerItems(driver);
-        driver.get(URL+"/xfinity-money/");
+        Thread.sleep(3000);
 
         System.out.println("Physical Number of Rows:" + (sheet1.getPhysicalNumberOfRows()-1));
         for (int i = 1; i < 3; i++) {
