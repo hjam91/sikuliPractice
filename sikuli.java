@@ -105,7 +105,7 @@ public class sikuli {
 
         String ID;
         URL = prop.getProperty("URL");
-        driver.get(URL+"/xfinity-money/");
+        //driver.get(URL+"/xfinity-money/");
         driver.manage().window().setPosition(new Point(0, 0));
         driver.manage().window().setSize(new Dimension(width, height));
 
@@ -121,6 +121,11 @@ public class sikuli {
 
             ID = sheet1.getRow(i).getCell(1).getStringCellValue();
             driver.get(URL + "/id/" + ID);
+            if (i<2){
+                Cookie newCookie= new Cookie("active_partner_exp", "xfinity", "/");
+                driver.manage().addCookie(newCookie);
+                driver.navigate().refresh();
+            }
             Thread.sleep(4000);
             verifyImage(baseImage);
             System.out.println("Image 1 match Success");
