@@ -91,8 +91,7 @@ public class sikuli {
         }
 */
         }
-
-
+    
         @Test(dataProvider = "getDimension")
         public void menuTest(int width, int height, String baseImage, String baseImageMenu) throws FindFailed, InterruptedException {
 
