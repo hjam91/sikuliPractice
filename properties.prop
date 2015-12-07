@@ -7,5 +7,6 @@ image1200menu = /home/fortegs/IdeaProjects/sikuliPractice/src/images/1200menu.pn
 image1024menu = /home/fortegs/IdeaProjects/sikuliPractice/src/images/1024menu.png
 image960menu = /home/fortegs/IdeaProjects/sikuliPractice/src/images/960menu.png
 image480menu = /home/fortegs/IdeaProjects/sikuliPractice/src/images/480menu.png
-environment = http://qa-ec02pub.cnbc.com
+URL = http://qa-ec02pub.cnbc.com
 chromeDriverLocation = /home/fortegs/IdeaProjects/sikuliPractice/src/chromedriver
+testDataLocation = /home/fortegs/IdeaProjects/sikuliPractice/src/NewsID.xlsx
