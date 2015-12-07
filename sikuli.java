@@ -57,7 +57,7 @@ public class sikuli {
 
 
         @Test(dataProvider="getDimension")
-        public void headerTest(int width, int height, String size, String menu ) throws FindFailed, InterruptedException, IOException {
+        public void headerTest(int width, int height, String baseImage, String baseImageMenu ) throws FindFailed, InterruptedException, IOException {
 
             String ID;
             URL = prop.getProperty("URL");
@@ -68,86 +68,33 @@ public class sikuli {
             FileInputStream testData = new FileInputStream(testDataSrc);
             XSSFWorkbook wb = new XSSFWorkbook(testData);
             XSSFSheet sheet1 = wb.getSheetAt(0);
+            headerItems headerItems1 = new headerItems(driver);
 
             System.out.println("Physical Number of Rows:" + (sheet1.getPhysicalNumberOfRows()-1));
             for (int i = 1; i < 3; i++) {
 
                 ID = sheet1.getRow(i).getCell(1).getStringCellValue();
                 driver.get(URL + "/id/" + ID);
-                verifyImage(size);
-                System.out.println("Image match Success");
-            }
-
-            /*Screen screen = new Screen();
-            Pattern image = new Pattern(size);
-            screen.find(image);
-            screen.wait(image, 10);
-          //  screen.click();
-            Match m = screen.find(image);*/
-
-           /* if (!(m == null)){
-                System.out.println("Images Matched" + m);
-            }
-            else
-                System.out.println("Did not match" + m);*/
-
-
-
-          /*  if (width > 960) {
-                builder.moveToElement(headerItems.getmoreLink()).perform();
-                Thread.sleep(3000);
-                verifyImage(menu);
-            } else {
-
-               // builder.moveToElement(headerItems.getNav()).click().perform();
-                headerItems.getNav().click();
-                Thread.sleep(3000);
-                verifyImage(menu);
-
-            }
-        }
-*/
-        }
-
-        @Test(dataProvider = "getDimension")
-        public void menuTest(int width, int height, String baseImage, String baseImageMenu) throws FindFailed, InterruptedException, IOException {
-
-            String ID;
-            URL = prop.getProperty("URL");
-            driver.manage().window().setPosition(new Point(0, 0));
-            driver.manage().window().setSize(new Dimension(width, height));
-
-            File testDataSrc = new File(prop.getProperty("testDataLocation"));
-            FileInputStream testData = new FileInputStream(testDataSrc);
-            XSSFWorkbook wb = new XSSFWorkbook(testData);
-            XSSFSheet sheet1 = wb.getSheetAt(0);
-
-
-            headerItems headerItems = new headerItems(driver);
-            Actions builder = new Actions(driver);
-
-            System.out.println("Physical Number of Rows:" + (sheet1.getPhysicalNumberOfRows() - 1));
-
-            for (int i = 1; i < 3; i++) {
+                verifyImage(baseImage);
+                System.out.println("Image 1 match Success");
 
                 if (width > 960) {
 
-                    ID = sheet1.getRow(i).getCell(1).getStringCellValue();
-                    driver.get(URL + "/id/" + ID);
-                    builder.moveToElement(headerItems.getmoreLink()).perform();
+                    Actions builder = new Actions(driver);
+                    builder.moveToElement(headerItems1.getmoreLink()).perform();
                     Thread.sleep(3000);
                     verifyImage(baseImageMenu);
-
-                    System.out.println("Image match Success");
-                } else {
-
-                    ID = sheet1.getRow(i).getCell(1).getStringCellValue();
-                    driver.get(URL + "/id/" + ID);
-                    headerItems.getNav().click();
-                    Thread.sleep(3000);
-                    verifyImage(baseImageMenu);
+                    System.out.println("Image 2 match Success");
                 }
-            }
+
+                else {
+                    headerItems1.getNav().click();
+                    Thread.sleep(3000);
+                    verifyImage(baseImageMenu);
+                    System.out.println("Image 2 match Success");
+                }
+
+        }
         }
 
 
@@ -219,3 +166,76 @@ public class sikuli {
         }
     }
 
+
+    /*Screen screen = new Screen();
+            Pattern image = new Pattern(size);
+            screen.find(image);
+            screen.wait(image, 10);
+          //  screen.click();
+            Match m = screen.find(image);*/
+
+           /* if (!(m == null)){
+                System.out.println("Images Matched" + m);
+            }
+            else
+                System.out.println("Did not match" + m);*/
+
+
+
+          /*  if (width > 960) {
+                builder.moveToElement(headerItems.getmoreLink()).perform();
+                Thread.sleep(3000);
+                verifyImage(menu);
+            } else {
+
+               // builder.moveToElement(headerItems.getNav()).click().perform();
+                headerItems.getNav().click();
+                Thread.sleep(3000);
+                verifyImage(menu);
+
+            }
+        }
+*/
+
+
+/*   @Test(dataProvider = "getDimension")
+        public void menuTest(int width, int height, String baseImage, String baseImageMenu) throws FindFailed, InterruptedException, IOException {
+
+            String ID;
+            URL = prop.getProperty("URL");
+            driver.manage().window().setPosition(new Point(0, 0));
+            driver.manage().window().setSize(new Dimension(width, height));
+
+            File testDataSrc = new File(prop.getProperty("testDataLocation"));
+            FileInputStream testData = new FileInputStream(testDataSrc);
+            XSSFWorkbook wb = new XSSFWorkbook(testData);
+            XSSFSheet sheet1 = wb.getSheetAt(0);
+
+
+            headerItems headerItems = new headerItems(driver);
+            Actions builder = new Actions(driver);
+
+            System.out.println("Physical Number of Rows:" + (sheet1.getPhysicalNumberOfRows() - 1));
+
+            for (int i = 1; i < 3; i++) {
+
+                if (width > 960) {
+
+                    ID = sheet1.getRow(i).getCell(1).getStringCellValue();
+                    driver.get(URL + "/id/" + ID);
+                    builder.moveToElement(headerItems.getmoreLink()).perform();
+                    Thread.sleep(3000);
+                    verifyImage(baseImageMenu);
+
+                    System.out.println("Image match Success");
+                } else {
+
+                    ID = sheet1.getRow(i).getCell(1).getStringCellValue();
+                    driver.get(URL + "/id/" + ID);
+                    headerItems.getNav().click();
+                    Thread.sleep(3000);
+                    verifyImage(baseImageMenu);
+                }
+            }
+        }
+*/
